@@ -1,0 +1,89 @@
+# Temperature Converter
+"""A simple temperature converter that converts between Celsius, Fahrenheit, and Kelvin."""
+
+def celsius_to_fahrenheit(c):
+    return (c * 9/5) + 32
+
+def celsius_to_kelvin(c):
+    return c + 273.15
+
+def fahrenheit_to_celsius(f):
+    return (f - 32) * 5/9
+
+def fahrenheit_to_kelvin(f):
+    return (f - 32) * 5/9 + 273.15
+
+def kelvin_to_celsius(k):
+    return k - 273.15
+
+def kelvin_to_fahrenheit(k):
+    return (k - 273.15) * 9/5 + 32
+
+
+"""Saves conversion results to a text file"""
+
+def save_con_file(text):
+    with open("conversions.txt", "a") as file:  # Open the file in Append mode
+        file.write(text + "\n") 
+
+
+# Main Conversion Function
+def convert_temperature(value, scale_from, scale_to):
+    scale_from = scale_from.lower()
+    scale_to = scale_to.lower()
+    result = None
+
+    if scale_from == "c" and scale_to == "f":
+        result = celsius_to_fahrenheit(value)
+    elif scale_from == "c" and scale_to == "k":
+        result = celsius_to_kelvin(value)
+    elif scale_from == "f" and scale_to == "c":
+        result = fahrenheit_to_celsius(value)
+    elif scale_from == "f" and scale_to == "k":
+        result = fahrenheit_to_kelvin(value)
+    elif scale_from == "k" and scale_to == "c":
+        result = kelvin_to_celsius(value)
+    elif scale_from == "k" and scale_to == "f":
+        result = kelvin_to_fahrenheit(value)
+    elif scale_from == scale_to:
+        result = value
+    else:
+        return None  
+
+    # Save result to file
+    save_con_file(f"{value} {scale_from.upper()} -> {result:.2f} {scale_to.upper()}")
+    return result
+
+
+# Main Program 
+def main():
+    print("---------------------------------------")
+    print("---- TEMPERATURE CONVERTER ----")
+    print("Conversion between Celsius (C), Fahrenheit (F), Kelvin (K)")
+    print("---------------------------------------")
+
+    while True:
+        try:
+            value = float(input("Enter temperature value: "))
+            scale_from = input("Convert from (C/F/K): ").strip()
+            scale_to = input("Convert to (C/F/K): ").strip()
+
+            result = convert_temperature(value, scale_from, scale_to)
+
+            if result is None:
+                print("Invalid conversion. Try again.")
+            else:
+                print(f"Result: {result:.2f} {scale_to.upper()}")
+                print("Saved to conversions.txt\n")
+
+        except ValueError:
+            print("Invalid number! Please try again.\n")
+
+        # Ask user if they want to continue
+        again = input("Do you want to convert again? (yes/no): ").lower()
+        if again != "yes":
+            print("Goodbye!")
+            break
+
+
+main()
